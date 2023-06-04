@@ -105,9 +105,15 @@ resource "aws_instance" "myapp-server" {
     tags = {
         Name = "${var.env_prefix}-server"
     }
+}
+
+resource "null_resource" "configure-server" {
+    triggers = {
+      trigger = aws_instance.myapp-server.public_ip
+    }
 
     provisioner "local-exec" {
-        command = "ansible-playbook -inventory ${self.public_ip}, --private_key ${vars.private_key} --user ec2-user docker-deploy.yaml"
+        command = "ansible-playbook -inventory ${aws_instance.myapp-server.public_ip}, --private_key ${vars.private_key} --user ec2-user docker-deploy.yaml"
     }
 }
 
