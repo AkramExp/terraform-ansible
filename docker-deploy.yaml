@@ -1,6 +1,6 @@
 ---
 - name: wait for ssh connection
-  hosts: all
+  hosts: aws_ec2
   gather_facts: False
   tasks:
     - name: ensure ssh port open
@@ -15,7 +15,7 @@
         ansible_connection: local
 
 - name: Install python 3, docker, docker compose
-  hosts: all
+  hosts: aws_ec2
   become: yes
   gather_facts: False
   tasks:
@@ -54,7 +54,7 @@
       meta: reset_connection
 
 - name: add ec2 user to the docker group
-  hosts: all
+  hosts: aws_ec2
   tasks:
     - name: add ec2 user
       user:
@@ -63,7 +63,7 @@
         append: yes
 
 - name: start docker containers
-  hosts: all
+  hosts: aws_ec2
   vars_file:
     - project-vars
   tasks:
